@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="bg-primary text-white text-center py-4 mb-4">
+        <h1>Projeto I.A</h1>
+    </div>
+
+
+    <div class="container">
+        <div class="nav mb-4 d-flex gap-3 justify-content-center">
+            <a href="/home" class="btn btn-outline-primary">FORMULÁRIO</a>
+            <a href="/dashboard" class="btn btn-outline-secondary">DASHBOARD</a>
+        </div>
+
+        <!-- Título do Dashboard -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="text-center">DASHBOARD DE PREDIÇÕES</h2>
+                <p class="text-center">Visão geral das predições feitas e estatísticas gerais.</p>
+            </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card" style="min-height: 180px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Total de Previsões</h5>
+                        <p class="card-text">Número total de previsões realizadas até o momento.</p>
+                        <h3 id="totalPredicoes">
+                            {{ contagem_classes['Maligno'] + contagem_classes['Benigno'] if contagem_classes else 0 }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="min-height: 180px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Predições Positivas (%)</h5>
+                        <p class="card-text">Porcentagem de predições benignas realizadas.</p>
+                        <h3 id="predicoesPositivas">
+                            {% set total = contagem_classes['Maligno'] + contagem_classes['Benigno'] if contagem_classes else 0 %}
+                            {% if total > 0 %}
+                                {{ ((contagem_classes['Benigno'] / total) * 100) | round(2) }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" style="min-height: 180px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Predições Negativas (%)</h5>
+                        <p class="card-text">Porcentagem de predições malignas realizadas.</p>
+                        <h3 id="predicoesNegativas">
+                            {% if total > 0 %}
+                                {{ ((contagem_classes['Maligno'] / total) * 100) | round(2) }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Previsões -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Gráfico de Previsões</h5>
+                        <canvas id="predicoesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Detalhes das Predições -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Detalhes das Predições</h5>
+                        <p>Registros carregados: {{ registros|length }}</p> <!-- Diagnóstico para debug -->
+        
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Raio</th>
+                                    <th>Textura</th>
+                                    <th>Perímetro</th>
+                                    <th>Área</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for linha in registros %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ linha[0] }}</td>
+                                    <td>{{ linha[1] }}</td>
+                                    <td>{{ linha[2] }}</td>
+                                    <td>{{ linha[3] }}</td>
+                                    <td>{{ linha[4] }}</td>
+                                    <td>{{ linha[5].strftime('%Y-%m-%d %H:%M:%S') if linha[5] else '' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+    <script>
+        // Converte os dados de classes preditas para o gráfico
+        const labels = JSON.parse('{{ contagem_classes.keys() | list | tojson | safe }}');
+        const data = JSON.parse('{{ contagem_classes.values() | list | tojson | safe }}');
+
+        var ctx = document.getElementById('predicoesChart').getContext('2d');
+        var predicoesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Número de Predições',
+                    data: data,
+                    backgroundColor: ['#4caf50', '#f44336', '#2196f3'], // adicione mais cores se precisar
+                    borderColor: ['#388e3c', '#d32f2f', '#1976d2'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

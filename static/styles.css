@@ -1,0 +1,168 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f8ff; /* Cor de fundo suave */
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px 20px;
+    width: 100%;
+    max-width: 900px; /* Ajusta a largura para não ficar muito esticada */
+    background-color: #fff; /* Fundo branco para o container */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.container > .nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ddd; /* Linha sutil embaixo do menu */
+}
+
+.nav > a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav > a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.formulario {
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    margin: 0 auto;
+    background-color: #fafafa; /* Fundo suave para o formulário */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formulario .form-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.formulario input {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    transition: border 0.3s;
+}
+
+.formulario input:focus {
+    border: 1px solid #007bff;
+    outline: none;
+}
+
+.formulario button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.formulario button:hover {
+    background-color: #0056b3;
+}
+
+.resultado {
+    background-color: #e8f5e9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resultado h3 {
+    color: #388e3c;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.resultado p {
+    color: #2c6e2f;
+    font-size: 16px;
+    margin: 0;
+}
+
+.table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-bordered {
+    border: 2px solid #ddd;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-secondary, .btn-success {
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
