@@ -153,12 +153,25 @@ def dashboard():
 
         # Estatísticas básicas
         estatisticas = df.describe().to_dict()
+        
+        # Dados para gráfico de linha (evolução temporal)
+        df['data_hora'] = pd.to_datetime(df['data_hora'])
+        df['data_str'] = df['data_hora'].dt.strftime('%Y-%m-%d %H:%M')
 
-        return render_template("dashboard.html", contagem_classes=contagem_classes, estatisticas=estatisticas, registros=registros)
+        # Agrupando por data e diagnóstico
+        evolucao = df.groupby(['data_str', 'diagnostico']).size().unstack(fill_value=0).reset_index()
+        labels_temporais = evolucao['data_str'].tolist()
+        benignos = evolucao.get('Benigno', pd.Series([0]*len(evolucao))).tolist()
+        malignos = evolucao.get('Maligno', pd.Series([0]*len(evolucao))).tolist()
+        
+        
+
+        return render_template("dashboard.html", contagem_classes=contagem_classes, estatisticas=estatisticas, registros=registros, labels_temporais=labels_temporais, 
+                               benignos=benignos, malignos=malignos)
     
     except Exception as e:
         return f"Erro ao carregar dashboard: {e}"
-
+    
 # Rota para exibir as predições salvas
 @app.route('/dados')
 def dados():
